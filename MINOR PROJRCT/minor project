@@ -1,0 +1,323 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+struct Passenger{
+    string name;
+    int age;
+    string gender;
+    string seatPreference;
+};
+
+class Booking{
+
+public:
+    int ticketID;
+    int pnr;
+    int trainID;
+    string trainName;
+    string coachType;
+
+    Passenger passengers[6];
+    int passengerCount;
+
+    friend void displayPNR(Booking b);
+};
+
+void displayPNR(Booking b){
+    cout<<"PNR Number : "<<b.pnr<<endl;
+}
+
+class Train{
+
+public:
+    int trainID;
+    string name,source,destination;
+    string departureTime;
+    string arrivalTime;
+    int distance;
+
+    Train(){}
+
+    Train(int id,string n,string s,string d,string dep,string arr,int dist){
+        trainID=id;
+        name=n;
+        source=s;
+        destination=d;
+        departureTime=dep;
+        arrivalTime=arr;
+        distance=dist;
+    }
+};
+
+class RailwaySystem{
+
+private:
+
+    Train trains[8];
+    Booking bookings[50];
+
+    int bookingCount=0;
+    int ticketCounter=1000;
+    int pnrCounter=50000;
+
+    int sleeperRate=1;
+    int ac3Rate=2;
+    int ac2Rate=3;
+    int ac1Rate=4;
+
+public:
+
+    RailwaySystem(){
+
+        trains[0]=Train(101,"Rajdhani Express","Delhi","Mumbai","16:00","08:00",1400);
+        trains[1]=Train(102,"Duronto Express","Mumbai","Ahmedabad","09:30","18:30",520);
+        trains[2]=Train(103,"Shatabdi Express","Delhi","Chandigarh","06:00","09:30",250);
+        trains[3]=Train(104,"Vande Bharat Express","Delhi","Varanasi","07:00","14:30",800);
+        trains[4]=Train(105,"Garib Rath Express","Chennai","Hyderabad","20:30","06:00",630);
+        trains[5]=Train(106,"Humsafar Express","Bangalore","Delhi","18:45","10:30",2150);
+        trains[6]=Train(107,"Tejas Express","Mumbai","Goa","05:50","14:00",580);
+        trains[7]=Train(108,"Jan Shatabdi Express","Pune","Mumbai","08:00","11:30",150);
+    }
+
+    inline int calculateFare(int rate,int distance,int passengers){
+        return rate*distance*passengers;
+    }
+
+    void viewTrains(string city="All"){
+
+        cout<<"\nTrain List ("<<city<<")\n";
+
+        cout<<"\n===============================================================================================================\n";
+
+        cout<<left
+            <<setw(10)<<"TrainID"
+            <<setw(25)<<"Train Name"
+            <<setw(15)<<"Source"
+            <<setw(15)<<"Destination"
+            <<setw(12)<<"Departure"
+            <<setw(12)<<"Arrival"
+            <<setw(10)<<"Dist"<<endl;
+
+        cout<<"===============================================================================================================\n";
+
+        for(int i=0;i<8;i++){
+
+            cout<<left
+                <<setw(10)<<trains[i].trainID
+                <<setw(25)<<trains[i].name
+                <<setw(15)<<trains[i].source
+                <<setw(15)<<trains[i].destination
+                <<setw(12)<<trains[i].departureTime
+                <<setw(12)<<trains[i].arrivalTime
+                <<setw(10)<<trains[i].distance
+                <<endl;
+        }
+
+        cout<<"===============================================================================================================\n";
+    }
+
+    void bookTicket(){
+
+        int id;
+        cout<<"\nEnter Train ID : ";
+        cin>>id;
+
+        Train *selected=nullptr;
+
+        for(int i=0;i<8;i++){
+            if(trains[i].trainID==id)
+                selected=&trains[i];
+        }
+
+        if(selected==nullptr){
+            cout<<"Invalid Train ID\n";
+            return;
+        }
+
+        cout<<"\nSelect Coach Type\n";
+        cout<<"1. Sleeper  (1rupee/km)\n";
+        cout<<"2. 3AC      (2rupees/km)\n";
+        cout<<"3. 2AC      (3rupees/km)\n";
+        cout<<"4. 1AC      (4rupees/km)\n";
+
+        int choice;
+        cin>>choice;
+
+        int rate=0;
+        string coach;
+
+        if(choice==1){ coach="Sleeper"; rate=sleeperRate; }
+        else if(choice==2){ coach="3AC"; rate=ac3Rate; }
+        else if(choice==3){ coach="2AC"; rate=ac2Rate; }
+        else{ coach="1AC"; rate=ac1Rate; }
+
+        int n;
+
+        cout<<"\nNumber of Passengers (max 6) : ";
+        cin>>n;
+
+        if(n>6){
+            cout<<"Maximum 6 passengers allowed!\n";
+            return;
+        }
+
+        Booking newBooking;
+
+        newBooking.ticketID=++ticketCounter;
+        newBooking.pnr=++pnrCounter;
+        newBooking.trainID=selected->trainID;
+        newBooking.trainName=selected->name;
+        newBooking.coachType=coach;
+        newBooking.passengerCount=n;
+
+        cin.ignore();
+
+        for(int i=0;i<n;i++){
+
+            cout<<"\nPassenger "<<i+1<<" Name : ";
+            getline(cin,newBooking.passengers[i].name);
+
+            cout<<"Age : ";
+            cin>>newBooking.passengers[i].age;
+            cin.ignore();
+
+            cout<<"Gender(female/male) : ";
+            getline(cin,newBooking.passengers[i].gender);
+
+            cout<<"Seat Preference(lower/middle/upper/no preference) : ";
+            getline(cin,newBooking.passengers[i].seatPreference);
+        }
+
+        bookings[bookingCount++]=newBooking;
+
+        int totalPrice=calculateFare(rate,selected->distance,n);
+
+        cout<<"\n================ TICKET CONFIRMED ================\n";
+
+        cout<<"Ticket ID : "<<newBooking.ticketID<<endl;
+        displayPNR(newBooking);
+        cout<<"Train     : "<<selected->name<<endl;
+        cout<<"Route     : "<<selected->source<<" -- "<<selected->destination<<endl;
+        cout<<"Departure : "<<selected->departureTime<<endl;
+        cout<<"Arrival   : "<<selected->arrivalTime<<endl;
+        cout<<"Distance  : "<<selected->distance<<" km\n";
+
+        cout<<"\nPassenger Details\n";
+
+        cout<<left
+            <<setw(20)<<"Name"
+            <<setw(8)<<"Age"
+            <<setw(10)<<"Gender"
+            <<setw(15)<<"Seat"<<endl;
+
+        for(int i=0;i<n;i++){
+
+            cout<<left
+                <<setw(20)<<newBooking.passengers[i].name
+                <<setw(8)<<newBooking.passengers[i].age
+                <<setw(10)<<newBooking.passengers[i].gender
+                <<setw(15)<<newBooking.passengers[i].seatPreference
+                <<endl;
+        }
+
+        cout<<"\nTotal Fare : "<<totalPrice<<endl;
+    }
+
+  void viewTickets(){
+
+    cout<<"\n========================================================================================================\n";
+
+    cout<<left
+        <<setw(10)<<"TicketID"
+        <<setw(12)<<"PNR"
+        <<setw(25)<<"Train"
+        <<setw(20)<<"Passenger"
+        <<setw(8)<<"Age"
+        <<setw(10)<<"Gender"
+        <<setw(15)<<"Seat"<<endl;
+
+    cout<<"========================================================================================================\n";
+
+    for(int i=0;i<bookingCount;i++){
+
+        for(int j=0;j<bookings[i].passengerCount;j++){
+
+            cout<<left
+                <<setw(10)<<bookings[i].ticketID
+                <<setw(12)<<bookings[i].pnr
+                <<setw(25)<<bookings[i].trainName
+                <<setw(20)<<bookings[i].passengers[j].name
+                <<setw(8)<<bookings[i].passengers[j].age
+                <<setw(10)<<bookings[i].passengers[j].gender
+                <<setw(15)<<bookings[i].passengers[j].seatPreference
+                <<endl;
+        }
+    }
+
+    cout<<"========================================================================================================\n";
+}
+
+    void cancelTicket(){
+
+        string name;
+
+        cin.ignore();
+
+        cout<<"Enter Passenger Name : ";
+        getline(cin,name);
+
+        for(int i=0;i<bookingCount;i++){
+
+            for(int j=0;j<bookings[i].passengerCount;j++){
+
+                if(bookings[i].passengers[j].name==name){
+
+                    for(int k=j;k<bookings[i].passengerCount-1;k++)
+                        bookings[i].passengers[k]=bookings[i].passengers[k+1];
+
+                    bookings[i].passengerCount--;
+
+                    cout<<"Ticket Cancelled\n";
+                    return;
+                }
+            }
+        }
+
+        cout<<"Passenger not found\n";
+    }
+};
+
+int main(){
+
+    RailwaySystem system;
+
+    int choice;
+
+    do{
+
+        cout<<"\n========================================\n";
+        cout<<"     RAILWAY RESERVATION SYSTEM\n";
+        cout<<"========================================\n";
+
+        cout<<"1. View Train Schedule\n";
+        cout<<"2. Book Ticket\n";
+        cout<<"3. View Tickets\n";
+        cout<<"4. Cancel Ticket\n";
+        cout<<"5. Exit\n";
+
+        cout<<"Enter Choice : ";
+        cin>>choice;
+
+        switch(choice){
+
+            case 1: system.viewTrains(); break;
+            case 2: system.bookTicket(); break;
+            case 3: system.viewTickets(); break;
+            case 4: system.cancelTicket(); break;
+        }
+
+    }while(choice!=5);
+
+    cout<<"\nThank You\n";
+}
