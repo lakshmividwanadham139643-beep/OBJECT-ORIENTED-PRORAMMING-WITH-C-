@@ -1,0 +1,83 @@
+#include <iostream>
+using namespace std;
+
+class Student {
+private:
+    int rollNo;
+    string name;
+    float m1, m2, m3;
+    float total, percentage;
+    char grade;
+
+public:
+    Student() {
+        rollNo = 0;
+        name = "";
+        m1 = m2 = m3 = total = percentage = 0;
+        grade = 'F';
+    }
+    void input() {
+        cout << "\nEnter Roll No: ";
+        cin >> rollNo;
+        cout << "Enter Name: ";
+        cin.ignore();
+        getline(cin,name);
+        cout << "Enter Marks of 3 Subjects: ";
+        cin >> m1 >> m2 >> m3;
+
+        calculateResult();
+    }
+    void calculateResult() {
+        total = m1 + m2 + m3;
+        percentage = total / 3;
+
+        if (percentage >= 90)
+            grade = 'A';
+        else if (percentage >= 75)
+            grade = 'B';
+        else if (percentage >= 50)
+            grade = 'C';
+        else
+            grade = 'F';
+    }
+    void display() const {
+        cout << "\n--- Student Result ---\n";
+        cout << "Roll No    : " << rollNo << endl;
+        cout << "Name       : " << name << endl;
+        cout << "Total      : " << total << endl;
+        cout << "Percentage : " << percentage << "%" << endl;
+        cout << "Grade      : " << grade << endl;
+
+        if (grade == 'F')
+            cout << "Result     : FAIL\n";
+        else
+            cout << "Result     : PASS\n";
+    }
+
+    ~Student() {
+        cout << "\nRecord Destroyed (Roll No: " << rollNo << ")";
+    }
+};
+
+int main() {
+
+    int n;
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    Student* s = new Student[n];
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter details for Student " << i + 1 << endl;
+        s[i].input();
+    }
+
+    cout << "\n\n========== Student Results ==========\n";
+    for (int i = 0; i < n; i++) {
+        s[i].display();
+    }
+
+    delete[] s;
+
+    return 0;
+}
