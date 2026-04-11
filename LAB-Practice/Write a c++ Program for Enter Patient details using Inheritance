@@ -1,0 +1,56 @@
+#include <iostream> 
+using namespace std; 
+class person { 
+protected: 
+    string name; 
+    int age; 
+    string gender; 
+ 
+public: 
+    void enterDetails( ){ 
+        cout << "Enter Name: "; 
+        cin >> name; 
+        cout << "Enter Age: "; 
+        cin >> age; 
+        cout<<"Enter Gender:"; 
+        cin >> gender; 
+    } 
+ 
+    void displayDetails( ){ 
+    cout<<"Name:"<<name<<endl; 
+    cout<<"Age:" <<age<<endl; 
+    cout<<"Gender: "<<gender <<endl; 
+    } 
+    }; 
+ 
+    class Patient : public person{ 
+private: 
+    string disease; 
+    string doctor; 
+ 
+public: 
+    void enterPatientDetails(){ 
+    enterDetails(); 
+    cout <<"Enter Disease: "; 
+    cin >> disease; 
+    cout << "Doctor Assigned:" ; 
+    cin >>doctor; 
+    } 
+ 
+ 
+    void displayPatientDetails(){ 
+    displayDetails(); 
+    cout << "Disease: "<<disease<<endl; 
+    cout<< "Doctor Assigned: "<<doctor<<endl; 
+    } 
+    }; 
+ 
+ 
+    int main(){ 
+    Patient p; 
+    cout <<"Enter Patient Details:\n"; 
+    p.enterPatientDetails(); 
+    cout<<"\npatient Details:\n"; 
+    p.displayPatientDetails(); 
+    return 0; 
+    }
