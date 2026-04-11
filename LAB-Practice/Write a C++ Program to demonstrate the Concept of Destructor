@@ -1,0 +1,18 @@
+#include<iostream> 
+using namespace std; 
+class Demo{ 
+public: 
+    Demo(){ 
+        cout << "constructor is called:object created!"<< endl; 
+    } 
+    ~Demo(){ 
+        cout <<"Destructor is called:object Destroyed!"<<endl; 
+    } 
+}; 
+int main(){ 
+    cout<<"creating object...\n"; 
+    Demo obj; 
+    cout << "Exiting program...\n"; 
+    return 0; 
+} 
+ 
