@@ -1,0 +1,59 @@
+#include <iostream> 
+using namespace std; 
+class Base { 
+private: 
+    int privateVar = 10; 
+protected: 
+    int protectedVar = 20; 
+public: 
+    int publicVar = 30; 
+    int getPrivateVar() 
+ { 
+        return privateVar; 
+    } 
+}; 
+class Derived : public Base { 
+public: 
+    void display() { 
+ 
+        cout << "Private Variable: " << getPrivateVar() << endl; 
+        cout << "Protected Variable: " << protectedVar << endl; 
+        cout << "Public Variable: " << publicVar << endl; 
+    } 
+}; 
+int main() { 
+    Derived obj; 
+    obj.display(); 
+ 
+    cout << "Public Variable from main: " << obj.publicVar << endl; 
+    return 0; 
+} #include <iostream> 
+using namespace std; 
+class Base { 
+private: 
+    int privateVar = 10; 
+protected: 
+    int protectedVar = 20; 
+public: 
+    int publicVar = 30; 
+    int getPrivateVar() 
+ { 
+        return privateVar; 
+    } 
+}; 
+class Derived : public Base { 
+public: 
+    void display() { 
+ 
+        cout << "Private Variable: " << getPrivateVar() << endl; 
+        cout << "Protected Variable: " << protectedVar << endl; 
+        cout << "Public Variable: " << publicVar << endl; 
+    } 
+}; 
+int main() { 
+    Derived obj; 
+    obj.display(); 
+ 
+    cout << "Public Variable from main: " << obj.publicVar << endl; 
+    return 0; 
+} 
