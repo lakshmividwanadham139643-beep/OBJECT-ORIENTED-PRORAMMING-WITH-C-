@@ -1,0 +1,23 @@
+#include <iostream>
+using namespace std;
+class Add {
+private:
+int num1, num2;
+public:
+}
+void setNumber(int a,int b){
+num1 = a;
+num2 = b;
+int getsum() {
+return num1 + num2;
+}
+} ;
+int main() {
+Add addition;
+int a,b;
+cout << "Enter two integers:";
+cin >> a >> b;
+addition.setNumber(a, b);
+cout << "The sum of the two integers is:" << addition.getsum() << endl;
+return 0;
+}
